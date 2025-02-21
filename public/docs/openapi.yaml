@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: 'GSMPay interview task api'
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8000'
+paths:
+  /api/auth/login:
+    post:
+      summary: ''
+      operationId: postApiAuthLogin
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mobile:
+                  type: string
+                  description: 'User mobile.'
+                  example: +1-111-111-111
+                  nullable: false
+                password:
+                  type: string
+                  description: 'User password.'
+                  example: password
+                  nullable: false
+              required:
+                - mobile
+                - password
+      security: []
+  /api/users:
+    get:
+      summary: ''
+      operationId: getApiUsers
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      name: 'Myrtle Wilkinson'
+                      mobile: '(401) 785-1921'
+                      profile_photo: 'https://via.placeholder.com/640x480.png/00ee11?text=consequatur'
+                    -
+                      name: 'Test User'
+                      mobile: +1-111-111-111
+                      profile_photo: 'https://via.placeholder.com/640x480.png/00ff11?text=sit'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        name: 'Myrtle Wilkinson'
+                        mobile: '(401) 785-1921'
+                        profile_photo: 'https://via.placeholder.com/640x480.png/00ee11?text=consequatur'
+                      -
+                        name: 'Test User'
+                        mobile: +1-111-111-111
+                        profile_photo: 'https://via.placeholder.com/640x480.png/00ff11?text=sit'
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: 'Myrtle Wilkinson'
+                        mobile:
+                          type: string
+                          example: '(401) 785-1921'
+                        profile_photo:
+                          type: string
+                          example: 'https://via.placeholder.com/640x480.png/00ee11?text=consequatur'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiUsers
+      description: ''
+      parameters:
+        -
+          in: header
+          name: _method
+          description: ''
+          example: PUT
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profile_photo:
+                  type: string
+                  format: binary
+                  description: 'User profile image.'
+                  nullable: false
+  /api/users/profile:
+    get:
+      summary: ''
+      operationId: getApiUsersProfile
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+  /api/posts:
+    get:
+      summary: ''
+      operationId: getApiPosts
+      description: ''
+      parameters:
+        -
+          in: query
+          name: page
+          description: ''
+          example: '1'
+          required: false
+          schema:
+            type: "Pagination's page"
+            description: ''
+            example: '1'
+            nullable: false
+        -
+          in: query
+          name: limit
+          description: ''
+          example: '10'
+          required: false
+          schema:
+            type: "Pagination's limit."
+            description: ''
+            example: '10'
+            nullable: false
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: number
+                  description: 'Must not be greater than 100.'
+                  example: 8
+                  nullable: false
+                limit:
+                  type: number
+                  description: 'Must not be greater than 100.'
+                  example: 7
+                  nullable: false
+  '/api/posts/{post_id}':
+    get:
+      summary: ''
+      operationId: getApiPostsPost_id
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+    parameters:
+      -
+        in: path
+        name: post_id
+        description: 'The ID of the post.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: post
+        description: ''
+        example: '1'
+        required: true
+        schema:
+          type: 'Them post id.'
+tags:
+  -
+    name: Endpoints
+    description: ''

@@ -1,0 +1,299 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/localhost:8000"
+        }
+    ],
+    "info": {
+        "name": "GSMPay interview task api",
+        "_postman_id": "83b04cb6-6f34-43cb-97d0-f7dbc12aa5d9",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "POST api\/auth\/login",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/auth\/login",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/auth\/login"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"mobile\":\"+1-111-111-111\",\"password\":\"password\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "GET api\/users",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/users",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/users"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"data\":[{\"name\":\"Myrtle Wilkinson\",\"mobile\":\"(401) 785-1921\",\"profile_photo\":\"https:\\\/\\\/via.placeholder.com\\\/640x480.png\\\/00ee11?text=consequatur\"},{\"name\":\"Test User\",\"mobile\":\"+1-111-111-111\",\"profile_photo\":\"https:\\\/\\\/via.placeholder.com\\\/640x480.png\\\/00ff11?text=sit\"}]}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "GET api\/users\/profile",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/users\/profile",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/users\/profile"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "PUT api\/users",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/users",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/users"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "_method",
+                                "value": "PUT"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "multipart\/form-data"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "profile_photo",
+                                    "src": [],
+                                    "type": "file"
+                                },
+                                {
+                                    "key": "_method",
+                                    "value": "PUT",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "GET api\/posts",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/posts",
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1",
+                                    "description": "",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10",
+                                    "description": "",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/posts?page=1&limit=10"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"page\":8,\"limit\":7}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "GET api\/posts\/{post_id}",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/posts\/:post_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/posts\/:post_id",
+                            "variable": [
+                                {
+                                    "id": "post_id",
+                                    "key": "post_id",
+                                    "value": "1",
+                                    "description": "The ID of the post."
+                                },
+                                {
+                                    "id": "post",
+                                    "key": "post",
+                                    "value": "1",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "noauth"
+    }
+}
