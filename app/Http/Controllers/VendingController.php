@@ -2,26 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\VendingMachineBusinessService;
+use App\Services\VendingOperationService;
 use Illuminate\Http\JsonResponse;
 
-class VendingMachineController extends Controller
+class VendingController extends Controller
 {
-    private VendingMachineBusinessService $vendingService;
+    private VendingOperationService $vendingService;
 
-    public function __construct(VendingMachineBusinessService $vendingService)
+    public function __construct(VendingOperationService $vendingService)
     {
         $this->vendingService = $vendingService;
     }
 
     public function status(): JsonResponse
     {
-        return response()->json($this->vendingService->getStatus());
+        $result = $this->vendingService->getStatus();
+
+        return response()->json($result);
     }
 
     public function insertCoin(): JsonResponse
     {
-        return response()->json(['message' => $this->vendingService->handleInsertCoin()]);
+        $result = $this->vendingService->handleInsertCoin();
+
+        return response()->json(['message' => $result]);
     }
 
     public function selectProduct(string $product): JsonResponse

@@ -2,16 +2,22 @@
 
 namespace App\States;
 
-use App\Contracts\VendingMachineContext;
-use App\Contracts\VendingMachineState;
+use App\Interfaces\IMachineState;
+use App\Interfaces\IVendingMachine;
+use App\Models\Machine;
 
-class IdleState implements VendingMachineState
+class IdleState implements IMachineState
 {
-    private VendingMachineContext $machine;
+    private Machine $machine;
 
-    public function __construct(VendingMachineContext $machine)
+    public function __construct(Machine $machine)
     {
         $this->machine = $machine;
+    }
+
+    public static function name(): string
+    {
+        return 'Idle';
     }
 
     public function insertCoin(): string

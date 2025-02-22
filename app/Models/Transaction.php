@@ -11,7 +11,7 @@ class Transaction extends Model
 
     public function vendingMachine(): BelongsTo
     {
-        return $this->belongsTo(VendingMachine::class);
+        return $this->belongsTo(Machine::class);
     }
 
     public function product(): BelongsTo

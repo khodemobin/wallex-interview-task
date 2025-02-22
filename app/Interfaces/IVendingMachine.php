@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Interfaces;
 
 
-interface VendingMachineContext
+interface IVendingMachine
 {
-    public function setState(VendingMachineState $state): void;
+    public function setState(IMachineState $state): void;
 
     public function hasStock(string $product): bool;
 
     public function reduceStock(string $product): void;
+
+    public function getProducts(): array;
 
     public function getStock(): array;
 

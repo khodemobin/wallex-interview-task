@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use App\Contracts\VendingMachineContext;
-use App\Models\VendingMachine;
-use App\Services\VendingMachineBusinessService;
-use App\Services\VendingMachineService;
+use App\Interfaces\IVendingMachine;
+use App\Models\Machine;
+use App\Services\VendingOperationService;
+use App\Services\VendingService;
+use App\States\IdleState;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,14 +16,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(VendingMachineContext::class, function ($app) {
-            $model = VendingMachine::query()->firstOrCreate(['name' => 'Machine 1']);
-
-            return new VendingMachineService($model);
+        $this->app->singleton(IVendingMachine::class, function ($app) {
+            return new VendingService();
         });
 
-        $this->app->singleton(VendingMachineBusinessService::class, function ($app) {
-            return new VendingMachineBusinessService($app->make(VendingMachineContext::class));
+        $this->app->singleton(VendingOperationService::class, function ($app) {
+            return new VendingOperationService($app->make(IVendingMachine::class));
         });
     }
 

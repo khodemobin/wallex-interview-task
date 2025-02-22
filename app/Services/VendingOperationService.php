@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Contracts\VendingMachineContext;
+use App\Interfaces\IVendingMachine;
 use Illuminate\Support\Facades\Cache;
 
-class VendingMachineBusinessService
+class VendingOperationService
 {
-    private VendingMachineContext $vendingMachine;
+    private IVendingMachine $vendingMachine;
 
-    public function __construct(VendingMachineContext $vendingMachine)
+    public function __construct(IVendingMachine $vendingMachine)
     {
         $this->vendingMachine = $vendingMachine;
     }
@@ -38,7 +38,7 @@ class VendingMachineBusinessService
         $lock = Cache::lock("vending_machine_{$this->vendingMachine->getStateName()}_lock", 10);
 
         try {
-            if (!$lock->get()) {
+            if (! $lock->get()) {
                 throw new \RuntimeException('Machine is busy. Please try again shortly.', 429);
             }
 

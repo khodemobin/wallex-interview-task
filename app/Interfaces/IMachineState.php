@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Interfaces;
 
-interface VendingMachineState
+interface IMachineState
 {
+    public static function name(): string;
+
     public function insertCoin(): string;
 
     public function selectProduct(string $product): string;

@@ -1,5 +1,6 @@
 <?php
 
+use App\States\IdleState;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,10 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vending_machines', function (Blueprint $table) {
+        Schema::create('machines', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('state')->default('IdleState');
+            $table->string('state')->default(IdleState::class);
             $table->timestamps();
         });
     }

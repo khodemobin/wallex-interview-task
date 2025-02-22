@@ -2,30 +2,35 @@
 
 namespace App\Services;
 
-use App\Contracts\VendingMachineContext;
+use App\Interfaces\IMachineState;
+use App\Interfaces\IVendingMachine;
+use App\Models\Machine;
 use App\Models\Product;
-use App\Models\VendingMachine;
+use App\States\IdleState;
 
-class VendingMachineService implements VendingMachineContext
+class VendingService implements IVendingMachine
 {
-    private mixed $state;
+    private IMachineState $state;
 
-    private VendingMachine $model;
+    private Machine $machine;
 
     private ?string $selectedProduct = null;
 
-    public function __construct(VendingMachine $model)
+    /**
+     * @throws \Throwable
+     */
+    public function __construct()
     {
-        $this->model = $model;
-        $stateClass = 'App\\States\\'.$model->state;
-        $this->state = new $stateClass($this);
+        $this->machine = Machine::query()->createOrFirst([]);
+
+        $this->state = new $this->model->state(($this));
     }
 
-    public function setState(VendingMachine $state): void
+    public function setState(IMachineState $state): void
     {
         $this->state = $state;
-        $this->model->state = (new \ReflectionClass($state))->getShortName();
-        $this->model->save();
+        $this->machine->state = (new \ReflectionClass($state))->getShortName();
+        $this->machine->save();
     }
 
     public function insertCoin(): string
@@ -45,7 +50,7 @@ class VendingMachineService implements VendingMachineContext
 
     public function hasStock(string $product): bool
     {
-        $productModel = Product::where('name', $product)->first();
+        $productModel = Product::query()->where('name', $product)->first();
 
         return $productModel && $productModel->stock > 0;
     }
@@ -58,6 +63,11 @@ class VendingMachineService implements VendingMachineContext
         }
     }
 
+    public function getProducts(): array
+    {
+        return Product::query()->get()->toArray();
+    }
+
     public function getStock(): array
     {
         return Product::query()->pluck('stock', 'name')->toArray();
@@ -65,7 +75,7 @@ class VendingMachineService implements VendingMachineContext
 
     public function getStateName(): string
     {
-        return $this->model->state;
+        return $this->machine->state::name();
     }
 
     public function setSelectedProduct(string $product): void
@@ -81,7 +91,7 @@ class VendingMachineService implements VendingMachineContext
     public function logTransaction(string $action, ?string $product = null): void
     {
         $productModel = $product ? Product::query()->where('name', $product)->first() : null;
-        $this->model->transactions()->create([
+        $this->machine->transactions()->create([
             'action' => $action,
             'product_id' => $productModel?->id,
         ]);
