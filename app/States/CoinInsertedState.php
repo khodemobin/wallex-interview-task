@@ -2,43 +2,49 @@
 
 namespace App\States;
 
-use App\Interfaces\IVendingMachine;
-use App\Interfaces\IMachineState;
+use App\Interfaces\iMachineState;
 use App\Models\Machine;
+use App\Models\Product;
+use App\Models\SelectedProduct;
+use Illuminate\Database\UniqueConstraintViolationException;
 
-class CoinInsertedState implements IMachineState
+class CoinInsertedState implements iMachineState
 {
-    private Machine $machine;
-
-    public function __construct(Machine $machine)
+    public function insertCoin(Machine $machine, int $amount): string
     {
-        $this->machine = $machine;
+        throw new \RuntimeException('Coin already inserted.');
     }
 
-    public static function name(): string
+    public function selectProduct(Machine $machine, Product $product): string
     {
-        return 'CoinInserted';
-    }
-
-    public function insertCoin(): string
-    {
-        return 'Coin already inserted.';
-    }
-
-    public function selectProduct(string $product): string
-    {
-        if ($this->machine->hasStock($product)) {
-            $this->machine->setSelectedProduct($product);
-            $this->machine->setState(new DispensingState($this->machine));
-
-            return "Dispensing $product...";
+        if ($product->stock === 0) {
+            throw new \RuntimeException('Product unavailable or out of stock.');
         }
 
-        return 'Product unavailable or out of stock.';
+        if ($machine->balance < $product->price) {
+            throw new \RuntimeException('Insufficient balance.');
+        }
+
+        try {
+            SelectedProduct::query()->create([
+                'machine_id' => $machine->id,
+                'product_id' => $product->id,
+            ]);
+
+            $machine->state = DispensingState::class;
+            $machine->save();
+
+            return "Dispensing {$product->name}...";
+
+        } catch (UniqueConstraintViolationException $e) {
+            return 'Product selected before.';
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function dispense(): string
+    public function dispense(Machine $machine): string
     {
-        return 'Please select a product first.';
+        throw new \RuntimeException('Please select a product first.');
     }
 }

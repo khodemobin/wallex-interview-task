@@ -2,36 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\VendingOperationService;
+use App\Http\Resources\MachineResource;
+use App\Models\Machine;
+use App\Models\Product;
+use App\Services\VendingService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class VendingController extends Controller
 {
-    private VendingOperationService $vendingService;
-
-    public function __construct(VendingOperationService $vendingService)
+    public function machines(VendingService $service): AnonymousResourceCollection
     {
-        $this->vendingService = $vendingService;
+        $result = $service->machines();
+
+        return MachineResource::collection($result);
     }
 
-    public function status(): JsonResponse
+    public function insertCoin(Request $request, Machine $machine, VendingService $service): JsonResponse
     {
-        $result = $this->vendingService->getStatus();
+        $request->validate([
+            'amount' => 'required|numeric',
+        ]);
 
-        return response()->json($result);
+        try {
+            $result = $service->handleInsertCoin($machine, $request->input('amount'));
+
+            return response()->json(['message' => $result]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
+        }
     }
 
-    public function insertCoin(): JsonResponse
-    {
-        $result = $this->vendingService->handleInsertCoin();
-
-        return response()->json(['message' => $result]);
-    }
-
-    public function selectProduct(string $product): JsonResponse
+    public function selectProduct(Machine $machine, Product $product, VendingService $service): JsonResponse
     {
         try {
-            return response()->json(['message' => $this->vendingService->handleSelectProduct($product)]);
+            $result = $service->handleSelectProduct($machine, $product);
+
+            return response()->json(['message' => $result]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
+        }
+    }
+
+    public function dispense(Machine $machine, VendingService $service): JsonResponse
+    {
+        try {
+            $result = $service->handleDispensing($machine);
+
+            return response()->json(['message' => $result]);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
         }

@@ -2,98 +2,48 @@
 
 namespace App\Services;
 
-use App\Interfaces\IMachineState;
-use App\Interfaces\IVendingMachine;
 use App\Models\Machine;
 use App\Models\Product;
-use App\States\IdleState;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
-class VendingService implements IVendingMachine
+readonly class VendingService
 {
-    private IMachineState $state;
+    public function machines(): Collection
+    {
+        return Machine::query()
+            ->with('products')
+            ->latest()
+            ->get();
+    }
 
-    private Machine $machine;
+    public function handleInsertCoin(Machine $machine, int $amount): string
+    {
+        $result = (new $machine->state)->insertCoin($machine, $amount);
+        Log::info('coin_inserted');
 
-    private ?string $selectedProduct = null;
+        return $result;
+    }
 
     /**
-     * @throws \Throwable
+     * @throws \Exception
      */
-    public function __construct()
+    public function handleSelectProduct(Machine $machine, Product $product): string
     {
-        $this->machine = Machine::query()->createOrFirst([]);
+        $result = (new $machine->state)->selectProduct($machine, $product);
+        Log::info("product_selected".$product->name);
 
-        $this->state = new $this->model->state(($this));
+        return $result;
     }
 
-    public function setState(IMachineState $state): void
+    /**
+     * @throws \Exception
+     */
+    public function handleDispensing(Machine $machine): string
     {
-        $this->state = $state;
-        $this->machine->state = (new \ReflectionClass($state))->getShortName();
-        $this->machine->save();
-    }
+        $result = (new $machine->state)->dispense($machine);
+        Log::info('product_dispensed');
 
-    public function insertCoin(): string
-    {
-        return $this->state->insertCoin();
-    }
-
-    public function selectProduct(string $product): string
-    {
-        return $this->state->selectProduct($product);
-    }
-
-    public function dispense(): string
-    {
-        return $this->state->dispense();
-    }
-
-    public function hasStock(string $product): bool
-    {
-        $productModel = Product::query()->where('name', $product)->first();
-
-        return $productModel && $productModel->stock > 0;
-    }
-
-    public function reduceStock(string $product): void
-    {
-        $productModel = Product::where('name', $product)->first();
-        if ($productModel) {
-            $productModel->reduceStock();
-        }
-    }
-
-    public function getProducts(): array
-    {
-        return Product::query()->get()->toArray();
-    }
-
-    public function getStock(): array
-    {
-        return Product::query()->pluck('stock', 'name')->toArray();
-    }
-
-    public function getStateName(): string
-    {
-        return $this->machine->state::name();
-    }
-
-    public function setSelectedProduct(string $product): void
-    {
-        $this->selectedProduct = $product;
-    }
-
-    public function getSelectedProduct(): ?string
-    {
-        return $this->selectedProduct;
-    }
-
-    public function logTransaction(string $action, ?string $product = null): void
-    {
-        $productModel = $product ? Product::query()->where('name', $product)->first() : null;
-        $this->machine->transactions()->create([
-            'action' => $action,
-            'product_id' => $productModel?->id,
-        ]);
+        return $result;
     }
 }

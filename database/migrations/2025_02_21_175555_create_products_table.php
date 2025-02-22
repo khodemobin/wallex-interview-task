@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->foreignId('machine_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('stock')->default(0);
+            $table->unsignedInteger('price')->default(0);
             $table->timestamps();
         });
     }

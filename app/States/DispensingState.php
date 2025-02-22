@@ -2,40 +2,42 @@
 
 namespace App\States;
 
-use App\Interfaces\IMachineState;
-use App\Interfaces\IVendingMachine;
+use App\Interfaces\iMachineState;
 use App\Models\Machine;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
-class DispensingState implements IMachineState
+class DispensingState implements iMachineState
 {
-    private Machine $machine;
-
-    public function __construct(Machine $machine)
+    public function insertCoin(Machine $machine, int $amount): string
     {
-        $this->machine = $machine;
+        throw new \RuntimeException('Dispensing in progress. Please wait.');
     }
 
-    public static function name(): string
+    public function selectProduct(Machine $machine, Product $product): string
     {
-        return 'Dispensing';
+        throw new \RuntimeException('Dispensing in progress. Please wait.');
     }
 
-    public function insertCoin(): string
+    public function dispense(Machine $machine): string
     {
-        return 'Dispensing in progress. Please wait.';
-    }
+        $selectedProduct = $machine->selectedProduct;
+        if (! $selectedProduct) {
+            throw new \RuntimeException('No product selected.');
+        }
 
-    public function selectProduct(string $product): string
-    {
-        return 'Dispensing in progress. Please wait.';
-    }
+        if ($selectedProduct->product->stock === 0) {
+            throw new \RuntimeException('Product unavailable or out of stock.');
+        }
 
-    public function dispense(): string
-    {
-        $product = $this->machine->getSelectedProduct();
-        $this->machine->reduceStock($product);
-        $this->machine->setState(new IdleState($this->machine));
+        DB::transaction(static function () use ($machine, $selectedProduct) {
+            $selectedProduct->product()->decrement('stock');
+            $machine->state = IdleState::class;
+            $machine->balance -= $selectedProduct->product->price;
+            $machine->save();
+            $machine->selectedProduct->delete();
+        });
 
-        return "Dispensed $product. Enjoy!";
+        return "Dispensed {$selectedProduct->product->name}. Enjoy!";
     }
 }

@@ -11,9 +11,20 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        Machine::query()->create(['name' => 'Machine 1', 'state' => IdleState::class]);
+        $machine = Machine::query()->create(['name' => 'Machine 1', 'state' => IdleState::class, 'balance' => 10]);
 
-        Product::query()->create(['name' => 'coffee', 'stock' => 10]);
-        Product::query()->create(['name' => 'soda', 'stock' => 15]);
+        Product::query()->create([
+            'machine_id' => $machine->id,
+            'name' => 'coffee',
+            'stock' => 10,
+            'price' => 1,
+        ]);
+
+        Product::query()->create([
+            'machine_id' => $machine->id,
+            'name' => 'soda',
+            'stock' => 15,
+            'price' => 2,
+        ]);
     }
 }

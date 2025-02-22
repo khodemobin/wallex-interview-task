@@ -2,38 +2,30 @@
 
 namespace App\States;
 
-use App\Interfaces\IMachineState;
-use App\Interfaces\IVendingMachine;
+use App\Interfaces\iMachineState;
 use App\Models\Machine;
+use App\Models\Product;
 
-class IdleState implements IMachineState
+class IdleState implements iMachineState
 {
-    private Machine $machine;
-
-    public function __construct(Machine $machine)
+    public function insertCoin(Machine $machine, int $amount): string
     {
-        $this->machine = $machine;
-    }
+        $machine->state = CoinInsertedState::class;
+        $machine->balance += $amount;
+        $machine->save();
 
-    public static function name(): string
-    {
-        return 'Idle';
-    }
-
-    public function insertCoin(): string
-    {
-        $this->machine->setState(new CoinInsertedState($this->machine));
+        Machine::updateState($machine, CoinInsertedState::class);
 
         return 'Coin inserted. Please select a product.';
     }
 
-    public function selectProduct(string $product): string
+    public function selectProduct(Machine $machine, Product $product): string
     {
-        return 'Please insert a coin first.';
+        throw new \RuntimeException('Please insert a coin first.');
     }
 
-    public function dispense(): string
+    public function dispense(Machine $machine): string
     {
-        return 'No product to dispense.';
+        throw new \RuntimeException('No product to dispense.');
     }
 }

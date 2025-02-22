@@ -15,7 +15,9 @@ return new class extends Migration
         Schema::create('machines', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
+            $table->integer('balance')->default(0);
             $table->string('state')->default(IdleState::class);
+            $table->integer('version')->default(1);
             $table->timestamps();
         });
     }
