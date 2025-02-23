@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $machine = Machine::query()->create(['name' => 'Machine 1', 'state' => IdleState::class, 'balance' => 10]);
+        $machine = Machine::query()->create(['name' => 'Machine 1', 'state' => IdleState::class, 'balance' => 0]);
 
         Product::query()->create([
             'machine_id' => $machine->id,

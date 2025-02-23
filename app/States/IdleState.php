@@ -5,9 +5,13 @@ namespace App\States;
 use App\Interfaces\iMachineState;
 use App\Models\Machine;
 use App\Models\Product;
+use Throwable;
 
 class IdleState implements iMachineState
 {
+    /**
+     * @throws Throwable
+     */
     public function insertCoin(Machine $machine, int $amount): string
     {
         $machine->state = CoinInsertedState::class;

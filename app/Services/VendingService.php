@@ -31,7 +31,7 @@ readonly class VendingService
     public function handleSelectProduct(Machine $machine, Product $product): string
     {
         $result = (new $machine->state)->selectProduct($machine, $product);
-        Log::info("product_selected".$product->name);
+        Log::info('product_selected'.$product->name);
 
         return $result;
     }

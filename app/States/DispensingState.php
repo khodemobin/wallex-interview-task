@@ -6,6 +6,7 @@ use App\Interfaces\iMachineState;
 use App\Models\Machine;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class DispensingState implements iMachineState
 {
@@ -19,6 +20,9 @@ class DispensingState implements iMachineState
         throw new \RuntimeException('Dispensing in progress. Please wait.');
     }
 
+    /**
+     * @throws Throwable
+     */
     public function dispense(Machine $machine): string
     {
         $selectedProduct = $machine->selectedProduct;
@@ -32,10 +36,11 @@ class DispensingState implements iMachineState
 
         DB::transaction(static function () use ($machine, $selectedProduct) {
             $selectedProduct->product()->decrement('stock');
-            $machine->state = IdleState::class;
             $machine->balance -= $selectedProduct->product->price;
             $machine->save();
             $machine->selectedProduct->delete();
+
+            Machine::updateState($machine, IdleState::class);
         });
 
         return "Dispensed {$selectedProduct->product->name}. Enjoy!";

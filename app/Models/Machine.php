@@ -5,9 +5,11 @@ namespace App\Models;
 use App\States\CoinInsertedState;
 use App\States\DispensingState;
 use App\States\IdleState;
+use Database\Factories\MachineFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -42,6 +44,9 @@ use Throwable;
  */
 class Machine extends Model
 {
+    /** @use HasFactory<MachineFactory> */
+    use HasFactory;
+
     protected $guarded = ['id'];
 
     public function products(): HasMany

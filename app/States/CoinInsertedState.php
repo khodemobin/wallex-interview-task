@@ -31,15 +31,13 @@ class CoinInsertedState implements iMachineState
                 'product_id' => $product->id,
             ]);
 
-            $machine->state = DispensingState::class;
-            $machine->save();
+            Machine::updateState($machine, DispensingState::class);
 
             return "Dispensing {$product->name}...";
-
         } catch (UniqueConstraintViolationException $e) {
-            return 'Product selected before.';
+            throw new \RuntimeException('Product selected before.');
         } catch (\Throwable $e) {
-            return $e->getMessage();
+            throw new \RuntimeException($e->getMessage());
         }
     }
 
