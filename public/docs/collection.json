@@ -9,8 +9,8 @@
         }
     ],
     "info": {
-        "name": "GSMPay interview task api",
-        "_postman_id": "83b04cb6-6f34-43cb-97d0-f7dbc12aa5d9",
+        "name": "Wallex interview task api",
+        "_postman_id": "fca24239-d125-44cd-a62b-e2bf0b9d6a8f",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -20,44 +20,13 @@
             "description": "",
             "item": [
                 {
-                    "name": "POST api\/auth\/login",
+                    "name": "GET api\/machines",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/auth\/login",
+                            "path": "api\/machines",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/auth\/login"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"mobile\":\"+1-111-111-111\",\"password\":\"password\"}"
-                        },
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "GET api\/users",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/users",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/users"
+                            "raw": "{{baseUrl}}\/api\/machines"
                         },
                         "method": "GET",
                         "header": [
@@ -86,121 +55,36 @@
                                 {
                                     "key": "content-type",
                                     "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"data\":[{\"name\":\"Myrtle Wilkinson\",\"mobile\":\"(401) 785-1921\",\"profile_photo\":\"https:\\\/\\\/via.placeholder.com\\\/640x480.png\\\/00ee11?text=consequatur\"},{\"name\":\"Test User\",\"mobile\":\"+1-111-111-111\",\"profile_photo\":\"https:\\\/\\\/via.placeholder.com\\\/640x480.png\\\/00ff11?text=sit\"}]}",
+                            "body": "{\"data\":[{\"id\":1,\"name\":\"Machine 1\",\"balance\":0,\"state\":\"App\\\\States\\\\IdleState\",\"products\":[{\"id\":1,\"name\":\"coffee\",\"stock\":10,\"price\":1},{\"id\":2,\"name\":\"soda\",\"stock\":15,\"price\":2}]}]}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "GET api\/users\/profile",
+                    "name": "POST api\/machines\/{machine_id}\/insert-coin",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/users\/profile",
+                            "path": "api\/machines\/:machine_id\/insert-coin",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/users\/profile"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
+                            "raw": "{{baseUrl}}\/api\/machines\/:machine_id\/insert-coin",
+                            "variable": [
                                 {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                }
-                            ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "PUT api\/users",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/users",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/users"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "_method",
-                                "value": "PUT"
-                            },
-                            {
-                                "key": "Content-Type",
-                                "value": "multipart\/form-data"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "formdata",
-                            "formdata": [
-                                {
-                                    "key": "profile_photo",
-                                    "src": [],
-                                    "type": "file"
-                                },
-                                {
-                                    "key": "_method",
-                                    "value": "PUT",
-                                    "type": "text"
+                                    "id": "machine_id",
+                                    "key": "machine_id",
+                                    "value": "1",
+                                    "description": "The ID of the machine."
                                 }
                             ]
                         },
-                        "description": ""
-                    },
-                    "response": []
-                },
-                {
-                    "name": "GET api\/posts",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/posts",
-                            "query": [
-                                {
-                                    "key": "page",
-                                    "value": "1",
-                                    "description": "",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "limit",
-                                    "value": "10",
-                                    "description": "",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/posts?page=1&limit=10"
-                        },
-                        "method": "GET",
+                        "method": "POST",
                         "header": [
                             {
                                 "key": "Content-Type",
@@ -213,52 +97,39 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"page\":8,\"limit\":7}"
+                            "raw": "{\"amount\":46027499.75368482}"
                         },
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                }
-                            ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
-                            "name": ""
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
                         }
-                    ]
+                    },
+                    "response": []
                 },
                 {
-                    "name": "GET api\/posts\/{post_id}",
+                    "name": "POST api\/machines\/{machine_id}\/select-product\/{product_id}",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/posts\/:post_id",
+                            "path": "api\/machines\/:machine_id\/select-product\/:product_id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/posts\/:post_id",
+                            "raw": "{{baseUrl}}\/api\/machines\/:machine_id\/select-product\/:product_id",
                             "variable": [
                                 {
-                                    "id": "post_id",
-                                    "key": "post_id",
+                                    "id": "machine_id",
+                                    "key": "machine_id",
                                     "value": "1",
-                                    "description": "The ID of the post."
+                                    "description": "The ID of the machine."
                                 },
                                 {
-                                    "id": "post",
-                                    "key": "post",
+                                    "id": "product_id",
+                                    "key": "product_id",
                                     "value": "1",
-                                    "description": ""
+                                    "description": "The ID of the product."
                                 }
                             ]
                         },
-                        "method": "GET",
+                        "method": "POST",
                         "header": [
                             {
                                 "key": "Content-Type",
@@ -270,25 +141,48 @@
                             }
                         ],
                         "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                }
-                            ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
-                            "name": ""
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
                         }
-                    ]
+                    },
+                    "response": []
+                },
+                {
+                    "name": "POST api\/machines\/{machine_id}\/dispense",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/machines\/:machine_id\/dispense",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/machines\/:machine_id\/dispense",
+                            "variable": [
+                                {
+                                    "id": "machine_id",
+                                    "key": "machine_id",
+                                    "value": "1",
+                                    "description": "The ID of the machine."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
                 }
             ]
         }

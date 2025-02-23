@@ -1,46 +1,16 @@
 openapi: 3.0.3
 info:
-  title: 'GSMPay interview task api'
+  title: 'Wallex interview task api'
   description: ''
   version: 1.0.0
 servers:
   -
     url: 'http://localhost:8000'
 paths:
-  /api/auth/login:
-    post:
-      summary: ''
-      operationId: postApiAuthLogin
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                mobile:
-                  type: string
-                  description: 'User mobile.'
-                  example: +1-111-111-111
-                  nullable: false
-                password:
-                  type: string
-                  description: 'User password.'
-                  example: password
-                  nullable: false
-              required:
-                - mobile
-                - password
-      security: []
-  /api/users:
+  /api/machines:
     get:
       summary: ''
-      operationId: getApiUsers
+      operationId: getApiMachines
       description: ''
       parameters: []
       responses:
@@ -53,186 +23,166 @@ paths:
                 example:
                   data:
                     -
-                      name: 'Myrtle Wilkinson'
-                      mobile: '(401) 785-1921'
-                      profile_photo: 'https://via.placeholder.com/640x480.png/00ee11?text=consequatur'
-                    -
-                      name: 'Test User'
-                      mobile: +1-111-111-111
-                      profile_photo: 'https://via.placeholder.com/640x480.png/00ff11?text=sit'
+                      id: 1
+                      name: 'Machine 1'
+                      balance: 0
+                      state: App\States\IdleState
+                      products:
+                        -
+                          id: 1
+                          name: coffee
+                          stock: 10
+                          price: 1
+                        -
+                          id: 2
+                          name: soda
+                          stock: 15
+                          price: 2
                 properties:
                   data:
                     type: array
                     example:
                       -
-                        name: 'Myrtle Wilkinson'
-                        mobile: '(401) 785-1921'
-                        profile_photo: 'https://via.placeholder.com/640x480.png/00ee11?text=consequatur'
-                      -
-                        name: 'Test User'
-                        mobile: +1-111-111-111
-                        profile_photo: 'https://via.placeholder.com/640x480.png/00ff11?text=sit'
+                        id: 1
+                        name: 'Machine 1'
+                        balance: 0
+                        state: App\States\IdleState
+                        products:
+                          -
+                            id: 1
+                            name: coffee
+                            stock: 10
+                            price: 1
+                          -
+                            id: 2
+                            name: soda
+                            stock: 15
+                            price: 2
                     items:
                       type: object
                       properties:
+                        id:
+                          type: integer
+                          example: 1
                         name:
                           type: string
-                          example: 'Myrtle Wilkinson'
-                        mobile:
+                          example: 'Machine 1'
+                        balance:
+                          type: integer
+                          example: 0
+                        state:
                           type: string
-                          example: '(401) 785-1921'
-                        profile_photo:
-                          type: string
-                          example: 'https://via.placeholder.com/640x480.png/00ee11?text=consequatur'
+                          example: App\States\IdleState
+                        products:
+                          type: array
+                          example:
+                            -
+                              id: 1
+                              name: coffee
+                              stock: 10
+                              price: 1
+                            -
+                              id: 2
+                              name: soda
+                              stock: 15
+                              price: 2
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 1
+                              name:
+                                type: string
+                                example: coffee
+                              stock:
+                                type: integer
+                                example: 10
+                              price:
+                                type: integer
+                                example: 1
       tags:
         - Endpoints
       security: []
-    put:
+  '/api/machines/{machine_id}/insert-coin':
+    post:
       summary: ''
-      operationId: putApiUsers
+      operationId: postApiMachinesMachine_idInsertCoin
       description: ''
-      parameters:
-        -
-          in: header
-          name: _method
-          description: ''
-          example: PUT
-          schema:
-            type: string
+      parameters: []
       responses: {  }
       tags:
         - Endpoints
       requestBody:
-        required: false
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                profile_photo:
-                  type: string
-                  format: binary
-                  description: 'User profile image.'
-                  nullable: false
-  /api/users/profile:
-    get:
-      summary: ''
-      operationId: getApiUsersProfile
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/posts:
-    get:
-      summary: ''
-      operationId: getApiPosts
-      description: ''
-      parameters:
-        -
-          in: query
-          name: page
-          description: ''
-          example: '1'
-          required: false
-          schema:
-            type: "Pagination's page"
-            description: ''
-            example: '1'
-            nullable: false
-        -
-          in: query
-          name: limit
-          description: ''
-          example: '10'
-          required: false
-          schema:
-            type: "Pagination's limit."
-            description: ''
-            example: '10'
-            nullable: false
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-      requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                page:
+                amount:
                   type: number
-                  description: 'Must not be greater than 100.'
-                  example: 8
+                  description: ''
+                  example: 46027499.753685
                   nullable: false
-                limit:
-                  type: number
-                  description: 'Must not be greater than 100.'
-                  example: 7
-                  nullable: false
-  '/api/posts/{post_id}':
-    get:
-      summary: ''
-      operationId: getApiPostsPost_id
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
+              required:
+                - amount
+      security: []
     parameters:
       -
         in: path
-        name: post_id
-        description: 'The ID of the post.'
+        name: machine_id
+        description: 'The ID of the machine.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/machines/{machine_id}/select-product/{product_id}':
+    post:
+      summary: ''
+      operationId: postApiMachinesMachine_idSelectProductProduct_id
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: machine_id
+        description: 'The ID of the machine.'
         example: 1
         required: true
         schema:
           type: integer
       -
         in: path
-        name: post
-        description: ''
-        example: '1'
+        name: product_id
+        description: 'The ID of the product.'
+        example: 1
         required: true
         schema:
-          type: 'Them post id.'
+          type: integer
+  '/api/machines/{machine_id}/dispense':
+    post:
+      summary: ''
+      operationId: postApiMachinesMachine_idDispense
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: machine_id
+        description: 'The ID of the machine.'
+        example: 1
+        required: true
+        schema:
+          type: integer
 tags:
   -
     name: Endpoints
