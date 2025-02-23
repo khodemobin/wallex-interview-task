@@ -70,7 +70,7 @@ class Machine extends Model
     {
         return DB::transaction(static function () use ($machine, $newState) {
             if (! Machine::canTransition($machine->state, $newState)) {
-                return false;
+                throw new \RuntimeException("can not change {$machine->state} to {$newState}");
             }
 
             $updated = Machine::query()
@@ -81,7 +81,7 @@ class Machine extends Model
                     'version' => $machine->version + 1,
                 ]);
 
-            return $updated ? Machine::query()->find($machine->id) : false;
+            return $updated ? Machine::query()->find($machine->id) : throw new \RuntimeException('race condition happend');
         });
     }
 

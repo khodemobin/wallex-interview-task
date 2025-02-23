@@ -14,10 +14,8 @@ class IdleState implements iMachineState
      */
     public function insertCoin(Machine $machine, int $amount): string
     {
-        $machine->state = CoinInsertedState::class;
         $machine->balance += $amount;
         $machine->save();
-
         Machine::updateState($machine, CoinInsertedState::class);
 
         return 'Coin inserted. Please select a product.';
